@@ -5,7 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -21,6 +23,7 @@ import retrofit.Retrofit;
 public class MainActivity extends ActionBarActivity {
 
     public static final String API_BASE_URL = "https://api.github.com";
+    GitHubService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +35,30 @@ public class MainActivity extends ActionBarActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        GitHubService service = retrofit.create(GitHubService.class);
+        service = retrofit.create(GitHubService.class);
+    }
 
-        final Call<List<Repo>> call = service.listRepos("arenaq");
-
+    public void getRepos(View view) {
         new AsyncTask<Void, Void, List<Repo>>() {
             @Override
             protected List<Repo> doInBackground(Void... params) {
+                EditText text = (EditText) findViewById(R.id.editText);
+                final Call<List<Repo>> call = service.listRepos(text.getText().toString());
+
                 try {
                     return call.execute().body();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 return null;
             }
 
             @Override
             protected void onPostExecute(List<Repo> repos) {
                 super.onPostExecute(repos);
+
+                if (repos == null) return;
 
                 List<String> names = new ArrayList<String>();
                 for (Repo repo : repos) names.add(repo.name);
