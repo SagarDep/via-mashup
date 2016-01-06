@@ -23,7 +23,9 @@ import retrofit.Retrofit;
 public class MainActivity extends ActionBarActivity {
 
     public static final String API_BASE_URL = "https://api.github.com";
+    public static final String IP_API_URL = "http://ip-api.com/";
     GitHubService service;
+    IpApiService ipApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,13 @@ public class MainActivity extends ActionBarActivity {
                 .build();
 
         service = retrofit.create(GitHubService.class);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(IP_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ipApiService = retrofit.create(IpApiService.class);
     }
 
     public void getRepos(View view) {
@@ -62,6 +71,38 @@ public class MainActivity extends ActionBarActivity {
 
                 List<String> names = new ArrayList<String>();
                 for (Repo repo : repos) names.add(String.valueOf(repo.owner.login)+":"+repo.id+":"+repo.name);
+
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
+                ListView listView = (ListView) findViewById(R.id.listView);
+                listView.setAdapter(adapter);
+            }
+        }.execute();
+    }
+
+    public void getInfo(View view) {
+        new AsyncTask<Void, Void, IpApiModel>() {
+            @Override
+            protected IpApiModel doInBackground(Void... params) {
+                EditText text = (EditText) findViewById(R.id.editText);
+                final Call<IpApiModel> call = ipApiService.lookup(text.getText().toString());
+
+                try {
+                    return call.execute().body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(IpApiModel response) {
+                super.onPostExecute(response);
+
+                if (response == null) return;
+
+                List<String> names = new ArrayList<String>();
+                names.add(response.city+", "+response.country+", "+response.regionName);
 
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
                 ListView listView = (ListView) findViewById(R.id.listView);

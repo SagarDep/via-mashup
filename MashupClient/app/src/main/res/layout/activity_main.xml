@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:text="arenaq" />
+        android:text="e4t.cz" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get repos"
         android:id="@+id/button"
-        android:onClick="getRepos" />
+        android:onClick="getInfo" />
 
     <ListView
         android:layout_width="fill_parent"
