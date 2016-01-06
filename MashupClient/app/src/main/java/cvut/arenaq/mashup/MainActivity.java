@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
                 if (repos == null) return;
 
                 List<String> names = new ArrayList<String>();
-                for (Repo repo : repos) names.add(repo.name);
+                for (Repo repo : repos) names.add(String.valueOf(repo.owner.login)+":"+repo.id+":"+repo.name);
 
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
                 ListView listView = (ListView) findViewById(R.id.listView);
