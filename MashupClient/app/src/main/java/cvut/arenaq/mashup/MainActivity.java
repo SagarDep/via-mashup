@@ -22,9 +22,7 @@ import retrofit.Retrofit;
 
 public class MainActivity extends ActionBarActivity {
 
-    public static final String API_BASE_URL = "https://api.github.com";
     public static final String IP_API_URL = "http://ip-api.com/";
-    GitHubService service;
     IpApiService ipApiService;
 
     @Override
@@ -33,50 +31,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        service = retrofit.create(GitHubService.class);
-
-        retrofit = new Retrofit.Builder()
                 .baseUrl(IP_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         ipApiService = retrofit.create(IpApiService.class);
-    }
-
-    public void getRepos(View view) {
-        new AsyncTask<Void, Void, List<Repo>>() {
-            @Override
-            protected List<Repo> doInBackground(Void... params) {
-                EditText text = (EditText) findViewById(R.id.editText);
-                final Call<List<Repo>> call = service.listRepos(text.getText().toString());
-
-                try {
-                    return call.execute().body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<Repo> repos) {
-                super.onPostExecute(repos);
-
-                if (repos == null) return;
-
-                List<String> names = new ArrayList<String>();
-                for (Repo repo : repos) names.add(String.valueOf(repo.owner.login)+":"+repo.id+":"+repo.name);
-
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
-                ListView listView = (ListView) findViewById(R.id.listView);
-                listView.setAdapter(adapter);
-            }
-        }.execute();
     }
 
     public void getInfo(View view) {
