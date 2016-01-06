@@ -36,7 +36,5 @@ MashupClient/*.DS_Store
 Thumbs.db
 
 # Intellij IDEA (see https://intellij-support.jetbrains.com/entries/23393067)
-MashupClient/.idea/workspace.xml
-MashupClient/.idea/tasks.xml
-MashupClient/.idea/datasources.xml
-MashupClient/.idea/dataSources.ids
+MashupClient/.idea/
+MashupClient/app/app.iml
