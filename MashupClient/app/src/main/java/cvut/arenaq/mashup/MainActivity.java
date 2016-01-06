@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
+import cvut.arenaq.mashup.AlchemyApi.GetRankedKeywords;
+import cvut.arenaq.mashup.AlchemyApi.Keyword;
 import cvut.arenaq.mashup.IpApi.IpApiModel;
 import cvut.arenaq.mashup.IpApi.IpApiService;
 import retrofit.Call;
@@ -24,7 +27,10 @@ import retrofit.Retrofit;
 public class MainActivity extends ActionBarActivity {
 
     public static final String IP_API_URL = "http://ip-api.com/";
+    public static final String ALCHEMY_API_URL = "http://gateway-a.watsonplatform.net/";
+    public static final String ALCHEMY_API_KEY = "e9b2175fdaa36af4febe23ec32b3b9ad47154727";
     IpApiService ipApiService;
+    AlchemyApiService alchemyApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,13 @@ public class MainActivity extends ActionBarActivity {
                 .build();
 
         ipApiService = retrofit.create(IpApiService.class);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(ALCHEMY_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        alchemyApiService = retrofit.create(AlchemyApiService.class);
     }
 
     public void getInfo(View view) {
@@ -63,6 +76,44 @@ public class MainActivity extends ActionBarActivity {
 
                 List<String> names = new ArrayList<String>();
                 names.add(response.getCity()+", "+response.getCountry()+", "+response.getRegionName());
+
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
+                ListView listView = (ListView) findViewById(R.id.listView);
+                listView.setAdapter(adapter);
+            }
+        }.execute();
+
+        new AsyncTask<Void, Void, GetRankedKeywords>() {
+            @Override
+            protected GetRankedKeywords doInBackground(Void... params) {
+                EditText text = (EditText) findViewById(R.id.editText);
+                final Call<GetRankedKeywords> call = alchemyApiService.getRankedKeywords(ALCHEMY_API_KEY, "json", text.getText().toString());
+
+                try {
+                    return call.execute().body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(GetRankedKeywords response) {
+                super.onPostExecute(response);
+
+                if (response == null) return;
+
+                List<String> names = new ArrayList<String>();
+                String keywords = "";
+
+                if (response.getKeywords() == null) {
+                    keywords += response.getStatus();
+                } else {
+                    for (Keyword keyword : response.getKeywords()) keywords += keyword.getText();
+                }
+
+                names.add(keywords);
 
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
                 ListView listView = (ListView) findViewById(R.id.listView);
