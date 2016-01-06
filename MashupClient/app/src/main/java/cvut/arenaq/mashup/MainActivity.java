@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cvut.arenaq.mashup.IpApi.IpApiModel;
+import cvut.arenaq.mashup.IpApi.IpApiService;
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;

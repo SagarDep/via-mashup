@@ -1,4 +1,4 @@
-package cvut.arenaq.mashup;
+package cvut.arenaq.mashup.IpApi;
 
 public class IpApiModel {
     private String status;
