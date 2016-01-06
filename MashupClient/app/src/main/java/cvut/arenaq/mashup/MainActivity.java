@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
                 if (response == null) return;
 
                 List<String> names = new ArrayList<String>();
-                names.add(response.city+", "+response.country+", "+response.regionName);
+                names.add(response.getCity()+", "+response.getCountry()+", "+response.getRegionName());
 
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
                 ListView listView = (ListView) findViewById(R.id.listView);
