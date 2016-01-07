@@ -102,11 +102,11 @@ public class MainActivity extends ActionBarActivity {
                 if (response.getKeywords() == null) {
                     keywords += response.getStatus();
                 } else {
-                    for (Keyword keyword : response.getKeywords()) keywords += keyword.getText();
+                    for (Keyword keyword : response.getKeywords()) keywords += keyword.getText()+" ";
                 }
 
-                TextView location = (TextView) findViewById(R.id.textLocation);
-                location.setText(keywords);
+                TextView content = (TextView) findViewById(R.id.textContent);
+                content.setText(keywords);
             }
         }.execute();
     }
