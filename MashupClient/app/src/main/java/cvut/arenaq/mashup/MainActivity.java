@@ -1,18 +1,15 @@
 package cvut.arenaq.mashup;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
 import cvut.arenaq.mashup.AlchemyApi.GetRankedKeywords;
@@ -56,7 +53,7 @@ public class MainActivity extends ActionBarActivity {
         new AsyncTask<Void, Void, IpApiModel>() {
             @Override
             protected IpApiModel doInBackground(Void... params) {
-                EditText text = (EditText) findViewById(R.id.editText);
+                EditText text = (EditText) findViewById(R.id.editDomain);
                 final Call<IpApiModel> call = ipApiService.lookup(text.getText().toString());
 
                 try {
@@ -74,19 +71,15 @@ public class MainActivity extends ActionBarActivity {
 
                 if (response == null) return;
 
-                List<String> names = new ArrayList<String>();
-                names.add(response.getCity()+", "+response.getCountry()+", "+response.getRegionName());
-
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
-                ListView listView = (ListView) findViewById(R.id.listView);
-                listView.setAdapter(adapter);
+                TextView location = (TextView) findViewById(R.id.textLocation);
+                location.setText(response.getCity()+", "+response.getCountry()+", "+response.getRegionName());
             }
         }.execute();
 
         new AsyncTask<Void, Void, GetRankedKeywords>() {
             @Override
             protected GetRankedKeywords doInBackground(Void... params) {
-                EditText text = (EditText) findViewById(R.id.editText);
+                EditText text = (EditText) findViewById(R.id.editDomain);
                 final Call<GetRankedKeywords> call = alchemyApiService.getRankedKeywords(ALCHEMY_API_KEY, "json", text.getText().toString());
 
                 try {
@@ -104,7 +97,6 @@ public class MainActivity extends ActionBarActivity {
 
                 if (response == null) return;
 
-                List<String> names = new ArrayList<String>();
                 String keywords = "";
 
                 if (response.getKeywords() == null) {
@@ -113,11 +105,8 @@ public class MainActivity extends ActionBarActivity {
                     for (Keyword keyword : response.getKeywords()) keywords += keyword.getText();
                 }
 
-                names.add(keywords);
-
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, names);
-                ListView listView = (ListView) findViewById(R.id.listView);
-                listView.setAdapter(adapter);
+                TextView location = (TextView) findViewById(R.id.textLocation);
+                location.setText(keywords);
             }
         }.execute();
     }
