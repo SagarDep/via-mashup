@@ -61,11 +61,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getInfo(View view) {
+        EditText text = (EditText) findViewById(R.id.editDomain);
+        final String url = text.getText().toString();
+
         new AsyncTask<Void, Void, WhoisWrapper>() {
             @Override
             protected WhoisWrapper doInBackground(Void... params) {
-                EditText text = (EditText) findViewById(R.id.editDomain);
-                final Call<WhoisWrapper> call = whoisApiService.whois(text.getText().toString());
+                final Call<WhoisWrapper> call = whoisApiService.whois(url);
 
                 try {
                     return call.execute().body();
@@ -90,8 +92,7 @@ public class MainActivity extends ActionBarActivity {
         new AsyncTask<Void, Void, IpApiModel>() {
             @Override
             protected IpApiModel doInBackground(Void... params) {
-                EditText text = (EditText) findViewById(R.id.editDomain);
-                final Call<IpApiModel> call = ipApiService.lookup(text.getText().toString());
+                final Call<IpApiModel> call = ipApiService.lookup(url);
 
                 try {
                     return call.execute().body();
@@ -116,8 +117,7 @@ public class MainActivity extends ActionBarActivity {
         new AsyncTask<Void, Void, GetRankedKeywords>() {
             @Override
             protected GetRankedKeywords doInBackground(Void... params) {
-                EditText text = (EditText) findViewById(R.id.editDomain);
-                final Call<GetRankedKeywords> call = alchemyApiService.getRankedKeywords(ALCHEMY_API_KEY, "json", text.getText().toString());
+                final Call<GetRankedKeywords> call = alchemyApiService.getRankedKeywords(ALCHEMY_API_KEY, "json", url);
 
                 try {
                     return call.execute().body();
