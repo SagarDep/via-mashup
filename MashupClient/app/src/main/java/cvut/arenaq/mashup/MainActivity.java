@@ -16,6 +16,8 @@ import cvut.arenaq.mashup.AlchemyApi.GetRankedKeywords;
 import cvut.arenaq.mashup.AlchemyApi.Keyword;
 import cvut.arenaq.mashup.IpApi.IpApiModel;
 import cvut.arenaq.mashup.IpApi.IpApiService;
+import cvut.arenaq.mashup.WhoisApi.WhoisApiService;
+import cvut.arenaq.mashup.WhoisApi.WhoisWrapper;
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -23,9 +25,11 @@ import retrofit.Retrofit;
 
 public class MainActivity extends ActionBarActivity {
 
+    public static final String WHOIS_API_URL = "http://arenaq-mashup.duke-hq.net/";
     public static final String IP_API_URL = "http://ip-api.com/";
     public static final String ALCHEMY_API_URL = "http://gateway-a.watsonplatform.net/";
     public static final String ALCHEMY_API_KEY = "e9b2175fdaa36af4febe23ec32b3b9ad47154727";
+    WhoisApiService whoisApiService;
     IpApiService ipApiService;
     AlchemyApiService alchemyApiService;
 
@@ -47,9 +51,42 @@ public class MainActivity extends ActionBarActivity {
                 .build();
 
         alchemyApiService = retrofit.create(AlchemyApiService.class);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(WHOIS_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        whoisApiService = retrofit.create(WhoisApiService.class);
     }
 
     public void getInfo(View view) {
+        new AsyncTask<Void, Void, WhoisWrapper>() {
+            @Override
+            protected WhoisWrapper doInBackground(Void... params) {
+                EditText text = (EditText) findViewById(R.id.editDomain);
+                final Call<WhoisWrapper> call = whoisApiService.whois(text.getText().toString());
+
+                try {
+                    return call.execute().body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(WhoisWrapper response) {
+                super.onPostExecute(response);
+
+                if (response == null) return;
+
+                TextView location = (TextView) findViewById(R.id.textLocation);
+                location.setText(response.getWhois().getRegistrar().get(0));
+            }
+        }.execute();
+
         new AsyncTask<Void, Void, IpApiModel>() {
             @Override
             protected IpApiModel doInBackground(Void... params) {
