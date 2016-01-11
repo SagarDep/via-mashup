@@ -12,8 +12,8 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
-import cvut.arenaq.mashup.AlchemyApi.GetRankedKeywords;
-import cvut.arenaq.mashup.AlchemyApi.Keyword;
+import cvut.arenaq.mashup.AlchemyApi.GetRankedTaxonomy;
+import cvut.arenaq.mashup.AlchemyApi.Taxonomy;
 import cvut.arenaq.mashup.IpApi.IpApiModel;
 import cvut.arenaq.mashup.IpApi.IpApiService;
 import cvut.arenaq.mashup.WhoisApi.WhoisApiService;
@@ -114,10 +114,10 @@ public class MainActivity extends ActionBarActivity {
             }
         }.execute();
 
-        new AsyncTask<Void, Void, GetRankedKeywords>() {
+        new AsyncTask<Void, Void, GetRankedTaxonomy>() {
             @Override
-            protected GetRankedKeywords doInBackground(Void... params) {
-                final Call<GetRankedKeywords> call = alchemyApiService.getRankedKeywords(ALCHEMY_API_KEY, "json", url);
+            protected GetRankedTaxonomy doInBackground(Void... params) {
+                final Call<GetRankedTaxonomy> call = alchemyApiService.getRankedTaxonomy(ALCHEMY_API_KEY, "json", url);
 
                 try {
                     return call.execute().body();
@@ -129,21 +129,21 @@ public class MainActivity extends ActionBarActivity {
             }
 
             @Override
-            protected void onPostExecute(GetRankedKeywords response) {
+            protected void onPostExecute(GetRankedTaxonomy response) {
                 super.onPostExecute(response);
 
                 if (response == null) return;
 
-                String keywords = "";
+                String taxonomy = "";
 
-                if (response.getKeywords() == null) {
-                    keywords += response.getStatus();
+                if (response.getTaxonomy() == null) {
+                    taxonomy += response.getStatus();
                 } else {
-                    for (Keyword keyword : response.getKeywords()) keywords += keyword.getText()+" ";
+                    for (Taxonomy keyword : response.getTaxonomy()) taxonomy += keyword.getLabel()+" ";
                 }
 
                 TextView content = (TextView) findViewById(R.id.textContent);
-                content.setText(keywords);
+                content.setText(taxonomy);
             }
         }.execute();
     }
