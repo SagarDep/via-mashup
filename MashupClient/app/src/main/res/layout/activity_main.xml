@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/layoutLocation"
-        android:layout_above="@+id/layoutFooter"
         android:id="@+id/layoutContent">
 
         <TextView
@@ -52,6 +51,16 @@
             android:id="@+id/textContent"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/layoutContent"
+        android:layout_above="@+id/layoutFooter"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
