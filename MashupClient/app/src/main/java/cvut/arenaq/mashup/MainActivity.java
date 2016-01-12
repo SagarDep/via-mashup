@@ -64,10 +64,7 @@ public class MainActivity extends Activity {
         whoisApiService = retrofit.create(WhoisApiService.class);
     }
 
-    public void getInfo(View view) {
-        EditText text = (EditText) findViewById(R.id.editDomain);
-        final String url = text.getText().toString();
-
+    public void getInfo(final String url) {
         new AsyncTask<Void, Void, WhoisWrapper>() {
             @Override
             protected WhoisWrapper doInBackground(Void... params) {
@@ -164,7 +161,7 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                getInfo(v);
+                getInfo(v.getText().toString());
                 return false;
             }
         });
