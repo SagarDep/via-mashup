@@ -1,8 +1,8 @@
 package cvut.arenaq.mashup;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +23,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     public static final String WHOIS_API_URL = "http://arenaq-mashup.duke-hq.net/";
     public static final String IP_API_URL = "http://ip-api.com/";
