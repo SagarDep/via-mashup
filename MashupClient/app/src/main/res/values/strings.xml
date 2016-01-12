@@ -3,7 +3,7 @@
 
     <string name="app_name">Mashup</string>
     <string name="action_settings">Settings</string>
-    <string name="default_domain">e4t.cz</string>
+    <string name="default_domain">ebay.com</string>
     <string name="button_get_info_title">Get info</string>
     <string name="action_lookup">Lookup</string>
     <string name="action_lookup_hint">Lookup domain</string>
