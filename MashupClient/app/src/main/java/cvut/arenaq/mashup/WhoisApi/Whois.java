@@ -3,13 +3,13 @@ package cvut.arenaq.mashup.WhoisApi;
 import java.util.List;
 
 public class Whois {
-    private List<String> registrar;
+    private String registrar;
     private List<String> nameServer;
     private String updated;
     private String created;
     private String expired;
 
-    public List<String> getRegistrar() {
+    public String getRegistrar() {
         return registrar;
     }
 

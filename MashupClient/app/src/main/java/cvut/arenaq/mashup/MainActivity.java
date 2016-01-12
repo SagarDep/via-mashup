@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
                 if (response == null) return;
 
                 TextView owner = (TextView) findViewById(R.id.textOwner);
-                owner.setText(response.getWhois().getRegistrar().get(0));
+                owner.setText(response.getWhois().getRegistrar());
             }
         }.execute();
 
