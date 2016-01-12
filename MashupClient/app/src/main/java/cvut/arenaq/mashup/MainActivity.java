@@ -13,6 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.IOException;
 
 import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
@@ -37,6 +45,7 @@ public class MainActivity extends Activity {
     AlchemyApiService alchemyApiService;
 
     TextView domain, ip, owner, created, expire, isp, nameservers, language, taxonomy, location;
+    GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,7 @@ public class MainActivity extends Activity {
         language = (TextView) findViewById(R.id.language);
         taxonomy = (TextView) findViewById(R.id.taxonomy);
         location = (TextView) findViewById(R.id.location);
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     }
 
     public void getInfo(final String url) {
@@ -128,6 +138,13 @@ public class MainActivity extends Activity {
                 owner.setText(response.getOrg());
                 isp.setText(response.getIsp());
                 location.setText(response.getCity() + ", " + response.getRegion() + ", " + response.getCountry());
+                if (map != null) {
+                    LatLng pos = new LatLng(Double.parseDouble(response.getLat()), Double.parseDouble(response.getLon()));
+                    map.addMarker(new MarkerOptions().position(pos))
+                            .setTitle(response.getCity());
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 10));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+                }
             }
         }.execute();
 
