@@ -1,12 +1,14 @@
 package cvut.arenaq.mashup;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -155,14 +157,25 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        View v = (View) menu.findItem(R.id.action_lookup).getActionView();
-        EditText txtSearch = ( EditText ) v.findViewById(R.id.lookup);
+        final MenuItem item = menu.findItem(R.id.action_lookup);
+        View v = (View) item.getActionView();
+        final EditText txtSearch = ( EditText ) v.findViewById(R.id.lookup);
         txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 getInfo(v);
                 return false;
+            }
+        });
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                txtSearch.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                return true;
             }
         });
 
@@ -175,6 +188,8 @@ public class MainActivity extends Activity {
         
         if (id == R.id.action_settings) {
             return true;
+        } if (id == R.id.action_lookup) {
+
         }
 
         return super.onOptionsItemSelected(item);
