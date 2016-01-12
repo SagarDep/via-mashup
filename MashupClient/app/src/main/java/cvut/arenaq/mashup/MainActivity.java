@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
 import cvut.arenaq.mashup.AlchemyApi.GetRankedTaxonomy;
-import cvut.arenaq.mashup.AlchemyApi.Taxonomy;
 import cvut.arenaq.mashup.IpApi.IpApiModel;
 import cvut.arenaq.mashup.IpApi.IpApiService;
 import cvut.arenaq.mashup.WhoisApi.WhoisApiService;
@@ -36,6 +35,8 @@ public class MainActivity extends Activity {
     WhoisApiService whoisApiService;
     IpApiService ipApiService;
     AlchemyApiService alchemyApiService;
+
+    TextView domain, ip, owner, created, expire, isp, nameservers, language, taxonomy, location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +63,21 @@ public class MainActivity extends Activity {
                 .build();
 
         whoisApiService = retrofit.create(WhoisApiService.class);
+
+        domain = (TextView) findViewById(R.id.domain);
+        ip = (TextView) findViewById(R.id.ip);
+        owner = (TextView) findViewById(R.id.owner);
+        created = (TextView) findViewById(R.id.created);
+        expire = (TextView) findViewById(R.id.expire);
+        isp = (TextView) findViewById(R.id.isp);
+        nameservers = (TextView) findViewById(R.id.nameservers);
+        language = (TextView) findViewById(R.id.language);
+        taxonomy = (TextView) findViewById(R.id.taxonomy);
+        location = (TextView) findViewById(R.id.location);
     }
 
     public void getInfo(final String url) {
+        domain.setText(url);
         new AsyncTask<Void, Void, WhoisWrapper>() {
             @Override
             protected WhoisWrapper doInBackground(Void... params) {
@@ -85,8 +98,9 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                TextView owner = (TextView) findViewById(R.id.textOwner);
-                owner.setText(response.getWhois().getRegistrar());
+                created.setText(response.getWhois().getCreated());
+                expire.setText(response.getWhois().getExpired());
+                nameservers.setText(response.getWhois().getNameServer()[0]);
             }
         }.execute();
 
@@ -110,8 +124,10 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                TextView location = (TextView) findViewById(R.id.textLocation);
-                location.setText(response.getCity()+", "+response.getCountry()+", "+response.getRegionName());
+                ip.setText(response.getQuery());
+                owner.setText(response.getOrg());
+                isp.setText(response.getIsp());
+                location.setText(response.getCity() + ", " + response.getRegion() + ", " + response.getCountry());
             }
         }.execute();
 
@@ -135,16 +151,11 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                String taxonomy = "";
+                language.setText(response.getLanguage());
 
                 if (response.getTaxonomy() == null) {
-                    taxonomy += response.getStatus();
-                } else {
-                    for (Taxonomy keyword : response.getTaxonomy()) taxonomy += keyword.getLabel()+" ";
+                    taxonomy.setText(response.getTaxonomy().get(0).getLabel());
                 }
-
-                TextView content = (TextView) findViewById(R.id.textContent);
-                content.setText(taxonomy);
             }
         }.execute();
     }
