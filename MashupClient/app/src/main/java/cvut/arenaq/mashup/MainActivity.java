@@ -98,6 +98,14 @@ public class MainActivity extends Activity {
         domain.setText(url);
         new AsyncTask<Void, Void, WhoisWrapper>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                created.setText("");
+                expire.setText("");
+                nameservers.setText("");
+            }
+
+            @Override
             protected WhoisWrapper doInBackground(Void... params) {
                 final Call<WhoisWrapper> call = whoisApiService.whois(url);
 
@@ -123,6 +131,18 @@ public class MainActivity extends Activity {
         }.execute();
 
         new AsyncTask<Void, Void, IpApiModel>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                ip.setText("");
+                owner.setText("");
+                isp.setText("");
+                location.setText("");
+                if (map != null) {
+                    map.clear();
+                }
+            }
+
             @Override
             protected IpApiModel doInBackground(Void... params) {
                 final Call<IpApiModel> call = ipApiService.lookup(url);
@@ -157,6 +177,14 @@ public class MainActivity extends Activity {
         }.execute();
 
         new AsyncTask<Void, Void, GetRankedTaxonomy>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                language.setText("");
+                taxonomy.removeAllViewsInLayout();
+                taxonomy.addView(new TextView(MainActivity.this));
+            }
+
             @Override
             protected GetRankedTaxonomy doInBackground(Void... params) {
                 final Call<GetRankedTaxonomy> call = alchemyApiService.getRankedTaxonomy(ALCHEMY_API_KEY, "json", url);
