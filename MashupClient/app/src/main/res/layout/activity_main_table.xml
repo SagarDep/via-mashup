@@ -241,6 +241,7 @@
             android:layout_height="400dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/location"
+            android:layout_marginTop="6dp"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.MapFragment" />
 
