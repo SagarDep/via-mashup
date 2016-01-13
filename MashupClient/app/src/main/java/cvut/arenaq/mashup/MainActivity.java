@@ -198,6 +198,18 @@ public class MainActivity extends Activity {
                         }
                     }
                     taxonomy.invalidate();
+                } else {
+                    String s = "error";
+                    TextView t = new TextView(MainActivity.this);
+                    t.setTextColor(Color.parseColor("#ff0000"));
+                    if (response.getStatusInfo() != null) {
+                        s = response.getStatusInfo();
+                    } else if (response.getStatus() != null) {
+                        s = response.getStatus();
+                    }
+                    t.setText(s);
+                    taxonomy.removeAllViewsInLayout();
+                    taxonomy.addView(t);
                 }
             }
         }.execute();
