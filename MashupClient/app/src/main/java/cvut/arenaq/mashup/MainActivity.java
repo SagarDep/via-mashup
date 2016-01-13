@@ -123,7 +123,11 @@ public class MainActivity extends Activity {
 
                 created.setText(response.getWhois().getCreated());
                 expire.setText(response.getWhois().getExpired());
-                nameservers.setText(response.getWhois().getNameServer()[0]);
+                String s = response.getWhois().getNameServer()[0];
+                if (response.getWhois().getNameServer().length > 1) {
+                    for (int i = 1; i < response.getWhois().getNameServer().length; i++) s += "\n" + response.getWhois().getNameServer()[i];
+                }
+                nameservers.setText(s);
             }
         }.execute();
 
