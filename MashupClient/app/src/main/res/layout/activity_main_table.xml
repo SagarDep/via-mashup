@@ -103,7 +103,7 @@
             android:id="@+id/delimeter2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/textView9"
+            android:layout_below="@+id/taxonomy"
             android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
             android:background="@android:color/darker_gray" />
@@ -189,14 +189,42 @@
             android:layout_alignLeft="@+id/nameservers"
             android:text="English" />
 
-        <TextView
+        <org.apmem.tools.layouts.FlowLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/taxonomy"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView9"
-            android:layout_alignBottom="@+id/textView9"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="shopping/auctions" />
+            android:layout_alignTop="@+id/textView9"
+            android:layout_alignLeft="@+id/nameservers" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:background="@color/common_plus_signin_btn_text_light_default"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="B"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C"
+                android:background="@color/common_plus_signin_btn_text_light_default"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E"
+                android:background="@color/common_plus_signin_btn_text_light_default"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </org.apmem.tools.layouts.FlowLayout>
 
         <TextView
             android:id="@+id/location"

@@ -34,4 +34,5 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'org.apmem.tools:layouts:1.10@aar'
 }
