@@ -2,6 +2,8 @@ package cvut.arenaq.mashup;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -21,10 +23,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apmem.tools.layouts.FlowLayout;
+
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
 import cvut.arenaq.mashup.AlchemyApi.GetRankedTaxonomy;
+import cvut.arenaq.mashup.AlchemyApi.Taxonomy;
 import cvut.arenaq.mashup.IpApi.IpApiModel;
 import cvut.arenaq.mashup.IpApi.IpApiService;
 import cvut.arenaq.mashup.WhoisApi.WhoisApiService;
@@ -44,7 +50,8 @@ public class MainActivity extends Activity {
     IpApiService ipApiService;
     AlchemyApiService alchemyApiService;
 
-    TextView domain, ip, owner, created, expire, isp, nameservers, language, taxonomy, location;
+    TextView domain, ip, owner, created, expire, isp, nameservers, language, location;
+    FlowLayout taxonomy;
     GoogleMap map;
 
     @Override
@@ -81,7 +88,7 @@ public class MainActivity extends Activity {
         isp = (TextView) findViewById(R.id.isp);
         nameservers = (TextView) findViewById(R.id.nameservers);
         language = (TextView) findViewById(R.id.language);
-        taxonomy = (TextView) findViewById(R.id.taxonomy);
+        taxonomy = (FlowLayout) findViewById(R.id.taxonomy);
         location = (TextView) findViewById(R.id.location);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setScrollGesturesEnabled(false);
@@ -171,8 +178,26 @@ public class MainActivity extends Activity {
 
                 language.setText(response.getLanguage());
 
-                if (response.getTaxonomy() == null) {
-                    taxonomy.setText(response.getTaxonomy().get(0).getLabel());
+                if (response.getTaxonomy() != null) {
+                    for (Taxonomy t : response.getTaxonomy()) {
+                        String line = t.getLabel();
+                        StringTokenizer st = new StringTokenizer(line, "/");
+                        while (st.hasMoreTokens()) {
+                            String tag = st.nextToken();
+                            TextView v = new TextView(MainActivity.this);
+                            GradientDrawable shape =  new GradientDrawable();
+                            shape.setCornerRadius(32);
+                            shape.setColor(Color.YELLOW);
+                            v.setBackground(shape);
+                            v.setPadding(16, 16, 16, 16);
+                            //ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            //params.setMargins(16, 0, 16, 0);
+                            v.setText(tag);
+                            taxonomy.addView(v);
+                            //taxonomy.addView(v, params);
+                        }
+                    }
+                    taxonomy.invalidate();
                 }
             }
         }.execute();
