@@ -84,6 +84,7 @@ public class MainActivity extends Activity {
         taxonomy = (TextView) findViewById(R.id.taxonomy);
         location = (TextView) findViewById(R.id.location);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.getUiSettings().setScrollGesturesEnabled(false);
     }
 
     public void getInfo(final String url) {
