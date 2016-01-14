@@ -3,6 +3,7 @@ package cvut.arenaq.mashup;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -214,16 +216,23 @@ public class MainActivity extends Activity {
                         while (st.hasMoreTokens()) {
                             String tag = st.nextToken();
                             TextView v = new TextView(MainActivity.this);
+
                             GradientDrawable shape =  new GradientDrawable();
-                            shape.setCornerRadius(32);
-                            shape.setColor(Color.YELLOW);
+                            shape.setCornerRadius(12);
+                            shape.setColor(Color.parseColor("#468847"));
                             v.setBackground(shape);
-                            v.setPadding(16, 16, 16, 16);
-                            //ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            //params.setMargins(16, 0, 16, 0);
+
+                            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(8, 8, 8, 8);
+                            v.setLayoutParams(params);
+
+                            v.setPadding(16, 12, 16, 12);
+
+                            v.setTextColor(Color.WHITE);
+                            v.setTypeface(null, Typeface.BOLD);
                             v.setText(tag);
                             taxonomy.addView(v);
-                            //taxonomy.addView(v, params);
+                            //taxonomy.addView(v, llp);
                         }
                     }
                     taxonomy.invalidate();
