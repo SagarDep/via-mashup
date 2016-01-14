@@ -95,11 +95,11 @@ public class MainActivity extends Activity {
     }
 
     public void getInfo(final String url) {
-        domain.setText(url);
         new AsyncTask<Void, Void, WhoisWrapper>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                domain.setText("");
                 created.setText("");
                 expire.setText("");
                 nameservers.setText("");
@@ -123,6 +123,8 @@ public class MainActivity extends Activity {
                 super.onPostExecute(response);
 
                 if (response == null) return;
+
+                domain.setText(url);
 
                 Whois whois = response.getWhois();
 
@@ -172,9 +174,10 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                ip.setText(response.getQuery());
-                owner.setText(response.getOrg());
-                isp.setText(response.getIsp());
+                if (response.getQuery() != null && response.getQuery() != "") ip.setText(response.getQuery());
+                if (response.getOrg() != null && response.getOrg() != "") owner.setText(response.getOrg());
+                if (response.getIsp() != null && response.getIsp() != "") isp.setText(response.getIsp());
+
                 String s = "";
                 if (response.getCity() != null && response.getCity() != "") s += response.getCity();
                 if (response.getRegion() != null && response.getRegion() != "") {
