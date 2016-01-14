@@ -32,6 +32,7 @@ import cvut.arenaq.mashup.AlchemyApi.GetRankedTaxonomy;
 import cvut.arenaq.mashup.AlchemyApi.Taxonomy;
 import cvut.arenaq.mashup.IpApi.IpApiModel;
 import cvut.arenaq.mashup.IpApi.IpApiService;
+import cvut.arenaq.mashup.WhoisApi.Whois;
 import cvut.arenaq.mashup.WhoisApi.WhoisApiService;
 import cvut.arenaq.mashup.WhoisApi.WhoisWrapper;
 import retrofit.Call;
@@ -123,13 +124,19 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                created.setText(response.getWhois().getCreated());
-                expire.setText(response.getWhois().getExpired());
-                String s = response.getWhois().getNameServer()[0];
-                if (response.getWhois().getNameServer().length > 1) {
-                    for (int i = 1; i < response.getWhois().getNameServer().length; i++) s += "\n" + response.getWhois().getNameServer()[i];
+                Whois whois = response.getWhois();
+
+                if (whois != null) {
+                    if (whois.getCreated() != null && whois.getCreated() != "") created.setText(whois.getCreated());
+                    if (whois.getExpired() != null && whois.getCreated() != "") expire.setText(whois.getExpired());
+                    if (whois.getNameServer() != null && whois.getNameServer().length > 0) {
+                        String s = response.getWhois().getNameServer()[0];
+                        if (response.getWhois().getNameServer().length > 1) {
+                            for (int i = 1; i < response.getWhois().getNameServer().length; i++) s += "\n" + response.getWhois().getNameServer()[i];
+                        }
+                        nameservers.setText(s);
+                    }
                 }
-                nameservers.setText(s);
             }
         }.execute();
 
