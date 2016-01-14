@@ -168,7 +168,17 @@ public class MainActivity extends Activity {
                 ip.setText(response.getQuery());
                 owner.setText(response.getOrg());
                 isp.setText(response.getIsp());
-                location.setText(response.getCity() + ", " + response.getRegion() + ", " + response.getCountry());
+                String s = "";
+                if (response.getCity() != null && response.getCity() != "") s += response.getCity();
+                if (response.getRegion() != null && response.getRegion() != "") {
+                    if (s != "") s += ", ";
+                    s += response.getRegion();
+                }
+                if (response.getCountry() != null && response.getCountry() != "") {
+                    if (s != "") s += ", ";
+                    s += response.getCountry();
+                }
+                location.setText(s);
                 if (map != null) {
                     LatLng pos = new LatLng(Double.parseDouble(response.getLat()), Double.parseDouble(response.getLon()));
                     map.addMarker(new MarkerOptions().position(pos))
