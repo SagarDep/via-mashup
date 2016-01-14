@@ -187,11 +187,13 @@ public class MainActivity extends Activity {
                 }
                 location.setText(s);
                 if (map != null) {
-                    LatLng pos = new LatLng(Double.parseDouble(response.getLat()), Double.parseDouble(response.getLon()));
-                    map.addMarker(new MarkerOptions().position(pos))
-                            .setTitle(response.getCity());
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 0));
-                    map.animateCamera(CameraUpdateFactory.zoomTo(11), 2000, null);
+                    if (response.getLat() != null && response.getLon() != null) {
+                        LatLng pos = new LatLng(Double.parseDouble(response.getLat()), Double.parseDouble(response.getLon()));
+                        if (response.getCity() != null && response.getCity() != "") map.addMarker(new MarkerOptions().position(pos))
+                                .setTitle(response.getCity());
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 0));
+                        map.animateCamera(CameraUpdateFactory.zoomTo(11), 2000, null);
+                    }
                 }
             }
         }.execute();
