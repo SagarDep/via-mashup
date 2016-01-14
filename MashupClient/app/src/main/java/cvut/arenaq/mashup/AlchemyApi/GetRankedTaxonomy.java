@@ -4,11 +4,16 @@ import java.util.List;
 
 public class GetRankedTaxonomy {
     private String status;
+    private String statusInfo;
     private String language;
     private List<Taxonomy> taxonomy;
 
     public String getStatus() {
         return status;
+    }
+
+    public String getStatusInfo() {
+        return statusInfo;
     }
 
     public String getLanguage() {

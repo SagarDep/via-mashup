@@ -2,17 +2,30 @@ package cvut.arenaq.mashup;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.apmem.tools.layouts.FlowLayout;
+
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import cvut.arenaq.mashup.AlchemyApi.AlchemyApiService;
 import cvut.arenaq.mashup.AlchemyApi.GetRankedTaxonomy;
@@ -36,10 +49,14 @@ public class MainActivity extends Activity {
     IpApiService ipApiService;
     AlchemyApiService alchemyApiService;
 
+    TextView domain, ip, owner, created, expire, isp, nameservers, language, location;
+    FlowLayout taxonomy;
+    GoogleMap map;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_table);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(IP_API_URL)
@@ -61,13 +78,32 @@ public class MainActivity extends Activity {
                 .build();
 
         whoisApiService = retrofit.create(WhoisApiService.class);
+
+        domain = (TextView) findViewById(R.id.domain);
+        ip = (TextView) findViewById(R.id.ip);
+        owner = (TextView) findViewById(R.id.owner);
+        created = (TextView) findViewById(R.id.created);
+        expire = (TextView) findViewById(R.id.expire);
+        isp = (TextView) findViewById(R.id.isp);
+        nameservers = (TextView) findViewById(R.id.nameservers);
+        language = (TextView) findViewById(R.id.language);
+        taxonomy = (FlowLayout) findViewById(R.id.taxonomy);
+        location = (TextView) findViewById(R.id.location);
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.getUiSettings().setScrollGesturesEnabled(false);
     }
 
-    public void getInfo(View view) {
-        EditText text = (EditText) findViewById(R.id.editDomain);
-        final String url = text.getText().toString();
-
+    public void getInfo(final String url) {
+        domain.setText(url);
         new AsyncTask<Void, Void, WhoisWrapper>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                created.setText("");
+                expire.setText("");
+                nameservers.setText("");
+            }
+
             @Override
             protected WhoisWrapper doInBackground(Void... params) {
                 final Call<WhoisWrapper> call = whoisApiService.whois(url);
@@ -87,12 +123,29 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                TextView owner = (TextView) findViewById(R.id.textOwner);
-                owner.setText(response.getWhois().getRegistrar());
+                created.setText(response.getWhois().getCreated());
+                expire.setText(response.getWhois().getExpired());
+                String s = response.getWhois().getNameServer()[0];
+                if (response.getWhois().getNameServer().length > 1) {
+                    for (int i = 1; i < response.getWhois().getNameServer().length; i++) s += "\n" + response.getWhois().getNameServer()[i];
+                }
+                nameservers.setText(s);
             }
         }.execute();
 
         new AsyncTask<Void, Void, IpApiModel>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                ip.setText("");
+                owner.setText("");
+                isp.setText("");
+                location.setText("");
+                if (map != null) {
+                    map.clear();
+                }
+            }
+
             @Override
             protected IpApiModel doInBackground(Void... params) {
                 final Call<IpApiModel> call = ipApiService.lookup(url);
@@ -112,12 +165,29 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                TextView location = (TextView) findViewById(R.id.textLocation);
-                location.setText(response.getCity()+", "+response.getCountry()+", "+response.getRegionName());
+                ip.setText(response.getQuery());
+                owner.setText(response.getOrg());
+                isp.setText(response.getIsp());
+                location.setText(response.getCity() + ", " + response.getRegion() + ", " + response.getCountry());
+                if (map != null) {
+                    LatLng pos = new LatLng(Double.parseDouble(response.getLat()), Double.parseDouble(response.getLon()));
+                    map.addMarker(new MarkerOptions().position(pos))
+                            .setTitle(response.getCity());
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 10));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+                }
             }
         }.execute();
 
         new AsyncTask<Void, Void, GetRankedTaxonomy>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                language.setText("");
+                taxonomy.removeAllViewsInLayout();
+                taxonomy.addView(new TextView(MainActivity.this));
+            }
+
             @Override
             protected GetRankedTaxonomy doInBackground(Void... params) {
                 final Call<GetRankedTaxonomy> call = alchemyApiService.getRankedTaxonomy(ALCHEMY_API_KEY, "json", url);
@@ -137,16 +207,48 @@ public class MainActivity extends Activity {
 
                 if (response == null) return;
 
-                String taxonomy = "";
+                language.setText(response.getLanguage());
 
-                if (response.getTaxonomy() == null) {
-                    taxonomy += response.getStatus();
+                if (response.getTaxonomy() != null) {
+                    for (Taxonomy t : response.getTaxonomy()) {
+                        String line = t.getLabel();
+                        StringTokenizer st = new StringTokenizer(line, "/");
+                        while (st.hasMoreTokens()) {
+                            String tag = st.nextToken();
+                            TextView v = new TextView(MainActivity.this);
+
+                            GradientDrawable shape =  new GradientDrawable();
+                            shape.setCornerRadius(12);
+                            shape.setColor(Color.parseColor("#468847"));
+                            v.setBackground(shape);
+
+                            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(8, 8, 8, 8);
+                            v.setLayoutParams(params);
+
+                            v.setPadding(16, 12, 16, 12);
+
+                            v.setTextColor(Color.WHITE);
+                            v.setTypeface(null, Typeface.BOLD);
+                            v.setText(tag);
+                            taxonomy.addView(v);
+                            //taxonomy.addView(v, llp);
+                        }
+                    }
+                    taxonomy.invalidate();
                 } else {
-                    for (Taxonomy keyword : response.getTaxonomy()) taxonomy += keyword.getLabel()+" ";
+                    String s = "error";
+                    TextView t = new TextView(MainActivity.this);
+                    t.setTextColor(Color.parseColor("#ff0000"));
+                    if (response.getStatusInfo() != null) {
+                        s = response.getStatusInfo();
+                    } else if (response.getStatus() != null) {
+                        s = response.getStatus();
+                    }
+                    t.setText(s);
+                    taxonomy.removeAllViewsInLayout();
+                    taxonomy.addView(t);
                 }
-
-                TextView content = (TextView) findViewById(R.id.textContent);
-                content.setText(taxonomy);
             }
         }.execute();
     }
@@ -163,7 +265,7 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                getInfo(v);
+                getInfo(v.getText().toString());
                 return false;
             }
         });
