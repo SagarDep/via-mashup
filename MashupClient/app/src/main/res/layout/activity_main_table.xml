@@ -25,8 +25,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView1"
             android:layout_alignTop="@+id/textView1"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="showmax.comaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView2"
@@ -44,8 +43,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView2"
             android:layout_alignTop="@+id/textView2"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="235.215.65.32aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView3"
@@ -63,8 +61,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView3"
             android:layout_alignTop="@+id/textView3"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="SHOWMAX AS.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView4"
@@ -82,8 +79,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView4"
             android:layout_alignTop="@+id/textView4"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="25. 4. 1999aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView5"
@@ -101,8 +97,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView5"
             android:layout_alignTop="@+id/textView5"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="26. 4. 2038aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView6"
@@ -120,8 +115,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView6"
             android:layout_alignTop="@+id/textView6"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="Centrio s.r.o.aaaaaaaaaaaaaaaaaaaaaaaa\naaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView7"
@@ -139,8 +133,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView7"
             android:layout_alignTop="@+id/textView7"
-            android:layout_toRightOf="@+id/textView7"
-            android:text="NS1.P47.DYNECT.COMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_toRightOf="@+id/textView7" />
 
         <View
             android:id="@+id/delimeter1"
@@ -167,8 +160,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView8"
             android:layout_alignTop="@+id/textView8"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="English" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <TextView
             android:id="@+id/textView9"
@@ -186,36 +178,7 @@
             android:layout_height="wrap_content"
             android:minHeight="22dp"
             android:layout_alignTop="@+id/textView9"
-            android:layout_alignLeft="@+id/nameservers" >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:background="@color/common_plus_signin_btn_text_light_default"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="B"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="C"
-                android:background="@color/common_plus_signin_btn_text_light_default"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="D"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E"
-                android:background="@color/common_plus_signin_btn_text_light_default"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </org.apmem.tools.layouts.FlowLayout>
+            android:layout_alignLeft="@+id/nameservers" />
 
         <View
             android:id="@+id/delimeter2"
@@ -242,8 +205,7 @@
             android:minHeight="22dp"
             android:layout_alignBaseline="@+id/textView10"
             android:layout_alignTop="@+id/textView10"
-            android:layout_alignLeft="@+id/nameservers"
-            android:text="Campbell, California, USaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_alignLeft="@+id/nameservers" />
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
