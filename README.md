@@ -11,8 +11,6 @@ Installation
 -----------
 Download latest [release](https://github.com/arenaq/via-mashup/releases).
 
-Installation via Google Play will be availiable soon.
-
 APIs
 -----------
 * [WhoisAPI](http://arenaq-mashup.duke-hq.net/doc/)
